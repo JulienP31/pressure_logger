@@ -3,14 +3,6 @@
 
 
 
-#include "stm32f1xx_hal_gpio.h"
-
-
-// -------------------- Constants --------------------
-#define LED_PORT GPIOA
-#define LED_PIN  GPIO_PIN_5
-
-
 // -------------------- Functions --------------------
 void pl_led_init(void);
 void pl_led_toggle(void);

@@ -3,7 +3,6 @@
 
 
 
-#include "stm32f1xx_hal_rcc.h"
 #include "pl_led.h"
 
 

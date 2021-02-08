@@ -1,11 +1,21 @@
+#include "stm32f1xx_hal_rcc.h"
+#include "stm32f1xx_hal_gpio.h"
 #include "pl_led.h"
 
 
 
-// -------------------- pl_led_init() --------------------
+// -------------------- Constants --------------------
+#define LED_PORT GPIOA
+#define LED_PIN  GPIO_PIN_5
+
+
+// -------------------- Functions --------------------
 void pl_led_init(void)
 {
 	GPIO_InitTypeDef rGPIO_Init = {0};
+	
+	// Enable GPIOA clock
+	__HAL_RCC_GPIOA_CLK_ENABLE();
 
 	// Configure LED GPIO
 	rGPIO_Init.Pin = LED_PIN;
@@ -16,14 +26,12 @@ void pl_led_init(void)
 }
 
 
-// -------------------- pl_led_toggle() --------------------
 void pl_led_toggle(void)
 {
 	HAL_GPIO_TogglePin(LED_PORT, LED_PIN);
 }
 
 
-// -------------------- pl_led_deinit() --------------------
 void pl_led_deinit(void)
 {
 	HAL_GPIO_DeInit(LED_PORT, LED_PIN);
