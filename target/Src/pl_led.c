@@ -1,5 +1,3 @@
-#include "stm32f1xx_hal_rcc.h"
-#include "stm32f1xx_hal_gpio.h"
 #include "pl_led.h"
 
 
@@ -9,7 +7,7 @@
 #define LED_PIN  GPIO_PIN_5
 
 
-// -------------------- Functions --------------------
+// -------------------- HAL Functions --------------------
 void pl_led_init(void)
 {
 	GPIO_InitTypeDef rGPIO_Init = {0};
@@ -35,5 +33,7 @@ void pl_led_toggle(void)
 void pl_led_deinit(void)
 {
 	HAL_GPIO_DeInit(LED_PORT, LED_PIN);
+	
+	__HAL_RCC_GPIOA_CLK_DISABLE();
 }
 
