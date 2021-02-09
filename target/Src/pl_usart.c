@@ -49,11 +49,12 @@ void pl_usart_init(void)
 	rGPIO_Tx_Init.Mode = GPIO_MODE_AF_PP;
 	rGPIO_Tx_Init.Pull = GPIO_NOPULL;
 	rGPIO_Tx_Init.Speed = GPIO_SPEED_HIGH;
+	HAL_GPIO_Init(USART_PORT, &rGPIO_Tx_Init);
 	
 	rGPIO_Rx_Init.Pin = USART_RX_PIN;
 	rGPIO_Rx_Init.Mode = GPIO_MODE_AF_OD;
-	
-	HAL_GPIO_Init(USART_PORT, &rGPIO_Tx_Init);
+	rGPIO_Rx_Init.Pull = GPIO_NOPULL;
+	rGPIO_Rx_Init.Speed = GPIO_SPEED_HIGH;
 	HAL_GPIO_Init(USART_PORT, &rGPIO_Rx_Init);		
 	
 	// Enable USART2 Rx IRQ
