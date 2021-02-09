@@ -13,3 +13,7 @@ gdb-multiarch -tui --eval-command="target extended-remote localhost:3333" build/
 load build/target.elf
 run
 
+----------
+
+picocom -b 115200 /dev/ttyACM0
+
