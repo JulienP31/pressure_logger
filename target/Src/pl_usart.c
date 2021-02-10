@@ -83,7 +83,9 @@ void pl_usart_init(void)
 
 void pl_usart_send(uint8_t uiByte)
 {
-	HAL_UART_Transmit(&grUART_Handle, &uiByte, 1, USART_TIMEOUT);
+	uint8_t uiData = uiByte;
+	
+	HAL_UART_Transmit(&grUART_Handle, &uiData, 1, USART_TIMEOUT);
 }
 
 

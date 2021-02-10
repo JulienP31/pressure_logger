@@ -15,5 +15,5 @@ run
 
 ----------
 
-picocom -b 115200 /dev/ttyACM0
+picocom -b 115200 /dev/ttyUSB0
 
