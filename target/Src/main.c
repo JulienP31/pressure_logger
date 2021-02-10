@@ -4,7 +4,7 @@
 
 int main(void)
 {
-	uint8_t uiMyByte = 'Y';
+	uint8_t uiMyByte = 'a';
 	
 	// Initialize hardware
 	pl_led_init();
@@ -21,12 +21,13 @@ int main(void)
 		
 		
 		// DEBUG (to be deleted)
-		pl_led_toggle();
-		pl_time_waitMs(500);
+		pl_usart_send(uiMyByte+1);
+		pl_time_waitMs(250);
 		if ( pl_usart_data_avail() )
 		{
+			pl_led_toggle();
 			pl_usart_recv(&uiMyByte);
-			pl_usart_send(uiMyByte);
+			pl_time_waitMs(250);
 		}
 	}
 }
