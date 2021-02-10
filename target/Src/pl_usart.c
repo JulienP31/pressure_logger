@@ -2,6 +2,11 @@
 
 
 
+// -------------------- Macros --------------------
+#define __PL_USART3_ENABLE_IRQ()  ( USART3->CR1 |= 1 << 5 )    //< set UART_IT_RXNE
+#define __PL_USART3_DISABLE_IRQ() ( USART3->CR1 &= ~(1 << 5) ) //< clear UART_IT_RXNE
+
+
 // -------------------- Constants --------------------
 #define USART3_PORT   GPIOC
 #define USART3_TX_PIN GPIO_PIN_10
@@ -66,7 +71,7 @@ void pl_usart_init(void)
 	HAL_GPIO_Init(USART3_PORT, &rGPIO_Rx_Init);
 	
 	// Enable USART3 Rx IRQ
-	USART3->CR1 |= 1 << 5; //< UART_IT_RXNE
+	__PL_USART3_ENABLE_IRQ();
 	
 	// Enable USART3 IRQ in NVIC
 	HAL_NVIC_EnableIRQ(USART3_IRQn);
@@ -85,7 +90,7 @@ void pl_usart_send(uint8_t uiByte)
 void pl_usart_recv(uint8_t *puiByte)
 {
 	// Disable USART3 Rx IRQ
-	USART3->CR1 &= ~(1 << 5); //< UART_IT_RXNE
+	__PL_USART3_DISABLE_IRQ();
 	
 	// Get byte
 	*puiByte = guiData;
@@ -94,7 +99,7 @@ void pl_usart_recv(uint8_t *puiByte)
 	gbDataAvail = 0;
 	
 	// Re-enable USART3 Rx IRQ
-	USART3->CR1 |= 1 << 5; //< UART_IT_RXNE
+	__PL_USART3_ENABLE_IRQ();
 }
 
 
