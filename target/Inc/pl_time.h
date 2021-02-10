@@ -10,7 +10,6 @@
 void pl_time_init(void);
 uint32_t pl_time_getMs(void);
 void pl_time_waitMs(uint32_t uiDuration); //< approximate wait (for debug only)
-void pl_time_deinit(void);
 
 
 

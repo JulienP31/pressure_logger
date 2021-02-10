@@ -61,22 +61,6 @@ void pl_time_waitMs(uint32_t uiDuration)
 }
 
 
-void pl_time_deinit(void)
-{
-	HAL_TIM_Base_Stop_IT(&grTIM_Handle);
-
-	HAL_TIM_Base_DeInit(&grTIM_Handle);
-	
-	HAL_NVIC_DisableIRQ(TIM1_UP_IRQn);
-	
-	__HAL_TIM_DISABLE_IT(&grTIM_Handle, TIM_IT_UPDATE);
-	
-	__HAL_TIM_DISABLE(&grTIM_Handle);
-	
-	__TIM1_CLK_DISABLE();
-}
-
-
 // -------------------- Internal Functions --------------------
 void TIM1_UP_IRQHandler(void)
 {

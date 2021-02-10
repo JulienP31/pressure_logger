@@ -30,9 +30,3 @@ void pl_led_toggle(void)
 	HAL_GPIO_TogglePin(LED_PORT, LED_PIN);
 }
 
-
-void pl_led_deinit(void)
-{
-	HAL_GPIO_DeInit(LED_PORT, LED_PIN);
-}
-
