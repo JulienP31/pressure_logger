@@ -2,11 +2,6 @@
 
 
 
-// -------------------- Macros --------------------
-#define __PL_USART3_ENABLE_IRQ()  ( USART3->CR1 |= 1 << 5 )    //< set UART_IT_RXNE
-#define __PL_USART3_DISABLE_IRQ() ( USART3->CR1 &= ~(1 << 5) ) //< clear UART_IT_RXNE
-
-
 // -------------------- Constants --------------------
 #define USART3_PORT   GPIOC
 #define USART3_TX_PIN GPIO_PIN_10
@@ -61,17 +56,17 @@ void pl_usart_init(void)
 	rGPIO_Tx_Init.Pin = USART3_TX_PIN;
 	rGPIO_Tx_Init.Mode = GPIO_MODE_AF_PP;
 	rGPIO_Tx_Init.Pull = GPIO_NOPULL;
-	rGPIO_Tx_Init.Speed = GPIO_SPEED_HIGH;
+	rGPIO_Tx_Init.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(USART3_PORT, &rGPIO_Tx_Init);
 	
 	rGPIO_Rx_Init.Pin = USART3_RX_PIN;
 	rGPIO_Rx_Init.Mode = GPIO_MODE_AF_INPUT;
 	rGPIO_Rx_Init.Pull = GPIO_NOPULL;
-	rGPIO_Rx_Init.Speed = GPIO_SPEED_HIGH;
+	rGPIO_Rx_Init.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(USART3_PORT, &rGPIO_Rx_Init);
 	
 	// Enable USART3 Rx IRQ
-	__PL_USART3_ENABLE_IRQ();
+	__HAL_UART_ENABLE_IT(&grUART_Handle, UART_IT_RXNE);
 	
 	// Enable USART3 IRQ in NVIC
 	HAL_NVIC_EnableIRQ(USART3_IRQn);
@@ -92,7 +87,7 @@ void pl_usart_send(uint8_t uiByte)
 void pl_usart_recv(uint8_t *puiByte)
 {
 	// Disable USART3 Rx IRQ
-	__PL_USART3_DISABLE_IRQ();
+	__HAL_UART_DISABLE_IT(&grUART_Handle, UART_IT_RXNE);
 	
 	// Get byte
 	*puiByte = guiData;
@@ -101,7 +96,7 @@ void pl_usart_recv(uint8_t *puiByte)
 	gbDataAvail = 0;
 	
 	// Re-enable USART3 Rx IRQ
-	__PL_USART3_ENABLE_IRQ();
+	__HAL_UART_ENABLE_IT(&grUART_Handle, UART_IT_RXNE);
 }
 
 
