@@ -130,7 +130,7 @@ void pl_sensor_start(pl_sensor_freq_t eFreq, uint8_t uiWatermark)
 }
 
 
-uint8_t pl_sensor_get_data(uint8_t *tuiBuffer)
+uint8_t pl_sensor_get_data(uint8_t tuiBuffer[])
 {
 	uint8_t uiByte = 0;
 	int i = 0;

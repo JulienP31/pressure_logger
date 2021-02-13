@@ -9,11 +9,16 @@
 #if DEBUG
 
 #include <string.h>
+#include "pl_time.h"
 
 
 void debug_usart(void)
 {
 	uint8_t uiMyByte = 'a';
+	
+	pl_time_init();
+	pl_led_init();
+	pl_usart_init();
 	
 	pl_usart_send(uiMyByte);
 	while (1)
@@ -31,9 +36,11 @@ void debug_usart(void)
 
 void debug_sensor(void)
 {
-	uint8_t tuiBuffer[256] = {0};
+	uint8_t tuiBuffer[SENSOR_BUF_SIZE_MAX] = {0};
 	uint8_t uiNbSamp = 0;
 	pl_sensor_freq_t eFreq = PL_SENSOR_FREQ_1_HZ;
+	
+	pl_sensor_init();
 	
 	for (eFreq = PL_SENSOR_FREQ_1_HZ ; eFreq <= PL_SENSOR_FREQ_7_HZ ; eFreq++)
 	{
@@ -57,22 +64,23 @@ void debug_sensor(void)
 // -------------------- Main Function --------------------
 int main(void)
 {
+	/* debug_usart(); */
+	/* debug_sensor(); */
+	
 	// Initialize hardware
 	pl_led_init();
-	pl_time_init();
-	//pl_usart_init();
+	pl_usart_init();
 	pl_sensor_init();
-	
-	//debug_usart();
-	debug_sensor();
-	
+		
 	// Initialize state machines
-	
+	pl_host_manager_init();
+	pl_proc_manager_init();
 	
 	while (1)
 	{
 		// Run state machines
-		
+		pl_host_manager_run();
+		pl_proc_manager_run();
 	}
 }
 

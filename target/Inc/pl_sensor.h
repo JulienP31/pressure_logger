@@ -6,6 +6,12 @@
 #include "stm32f1xx_hal.h"
 
 
+// -------------------- Constants --------------------
+#define SENSOR_FIFO_SIZE    32
+
+#define SENSOR_BUF_SIZE_MAX (3 * SENSOR_FIFO_SIZE)
+
+
 // -------------------- Typedefs --------------------
 typedef enum pl_sensor_freq
 {
@@ -19,7 +25,7 @@ typedef enum pl_sensor_freq
 // -------------------- HAL Functions --------------------
 void pl_sensor_init(void);
 void pl_sensor_start(pl_sensor_freq_t eFreq, uint8_t uiWatermark);
-uint8_t pl_sensor_get_data(uint8_t *tuiBuffer);
+uint8_t pl_sensor_get_data(uint8_t tuiBuffer[]);
 uint8_t pl_sensor_data_avail(void);
 void pl_sensor_stop(void);
 

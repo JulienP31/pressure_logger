@@ -8,8 +8,8 @@
 
 // -------------------- HAL Functions --------------------
 void pl_usart_init(void);
-void pl_usart_send(uint8_t uiByte);   //< blocking mode (with timeout)
-void pl_usart_recv(uint8_t *puiByte); //< blocking mode (with timeout)
+void pl_usart_send(uint8_t uiByte);
+void pl_usart_recv(uint8_t *puiByte);
 uint8_t pl_usart_data_avail(void);
 
 
