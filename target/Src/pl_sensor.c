@@ -135,10 +135,10 @@ uint8_t pl_sensor_get_data(uint8_t *tuiBuffer)
 	uint8_t uiByte = 0;
 	int i = 0;
 	
-	// Get pressure l-m-h data
+	// Get pressure l-m-h data [NOTA : base_addr | (1 << 7) -> multiple I2C Rd-Wr cmd]
 	for (i = 0 ; i < guiWatermark ; i++)
 	{
-		HAL_I2C_Mem_Read(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_PRESS_OUT_XL, 1, tuiBuffer+3*i, 3, I2C_TIMEOUT);
+		HAL_I2C_Mem_Read( &grI2C_Handle, SENSOR_I2C_ADDRESS, REG_PRESS_OUT_XL | 0x80, 1, tuiBuffer+3*i, 3, I2C_TIMEOUT );
 	}
 	
 	// Reset gbDataAvail flag [NOTA : no lock needed here since this flag can only be set in IRQ context ...
