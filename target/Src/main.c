@@ -39,8 +39,7 @@ void debug_sensor(void)
 	{
 		memset(tuiBuffer, 0, sizeof(tuiBuffer));
 		uiNbSamp = 0;
-		pl_sensor_configure(eFreq, 4);
-		pl_sensor_start();
+		pl_sensor_start(eFreq, 4);
 		while (uiNbSamp < 30)
 		{
 			if ( pl_sensor_data_avail() )

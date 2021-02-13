@@ -15,24 +15,24 @@
 /* Registers */
 #define REG_WHO_AM_I     0x0f
 
-#define REG_CTRL_REG1    0x20 //< Power Down + Output Data Rate
-#define REG_CTRL_REG2    0x21 //< FIFO mode + WaTerMark
-#define REG_CTRL_REG3    0x22 //< INT1 active Low
-#define REG_CTRL_REG4    0x23 //< WaTerMark signal on INT1 pin
+#define REG_CTRL_REG1    0x20 //< Power up-down + Output data rate
+#define REG_CTRL_REG2    0x21 //< FIFO mode + Watermark mode
+#define REG_CTRL_REG3    0x22 //< INT1 active low
+#define REG_CTRL_REG4    0x23 //< Watermark signal on INT1 pin
 
 #define REG_INT_SOURCE   0x25 //< INT1 acknowledgment
 
-#define REG_PRESS_OUT_XL 0x28 //< Pressure Low
-#define REG_PRESS_OUT_L  0x29 //< Pressure Medium
-#define REG_PRESS_OUT_H  0x2a //< Pressure High
+#define REG_PRESS_OUT_XL 0x28 //< Pressure low
+#define REG_PRESS_OUT_L  0x29 //< Pressure medium
+#define REG_PRESS_OUT_H  0x2a //< Pressure high
 
-#define REG_FIFO_CTRL    0x2e //< Stream mode
+#define REG_FIFO_CTRL    0x2e //< Stream-Bypass mode (FIFO) + Watermark level
 
 
 // -------------------- Global variables --------------------
 static I2C_HandleTypeDef grI2C_Handle;
 
-static uint8_t guiNbSamp;
+static uint8_t guiWatermark;
 
 static uint8_t gbDataAvail;
 
@@ -98,38 +98,35 @@ void pl_sensor_init(void)
 }
 
 
-void pl_sensor_configure(pl_sensor_freq_t eFreq, uint8_t uiNbSamp)
-{
-	uint8_t uiByte = 0;
-	
-	guiNbSamp = uiNbSamp;
-	
-	uiByte = ( (eFreq & 0x07) << 4 );
-	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_CTRL_REG1, 1, &uiByte, 1, I2C_TIMEOUT);
-	
-	uiByte = (1 << 6) | (1 << 5);
-	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_CTRL_REG2, 1, &uiByte, 1, I2C_TIMEOUT);
-	
-	uiByte = (1 << 7);
-	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_CTRL_REG3, 1, &uiByte, 1, I2C_TIMEOUT);
-	
-	uiByte = (1 << 2);
-	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_CTRL_REG4, 1, &uiByte, 1, I2C_TIMEOUT);
-	
-	uiByte = (1 << 6) | ((uiNbSamp-1) & 0x1f);
-	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_FIFO_CTRL, 1, &uiByte, 1, I2C_TIMEOUT);
-}
-
-
-void pl_sensor_start(void)
+void pl_sensor_start(pl_sensor_freq_t eFreq, uint8_t uiWatermark)
 {
 	uint8_t uiByte = 0;
 	
 	gbDataAvail = 0;
+	guiWatermark = uiWatermark;
 	
-	HAL_I2C_Mem_Read(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_CTRL_REG1, 1, &uiByte, 1, I2C_TIMEOUT);
-	uiByte |= (1 << 7);
-	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_CTRL_REG1, 1, &uiByte, 1, I2C_TIMEOUT);	
+	// Force stop
+	pl_sensor_stop();
+	
+	// Power up + Output data rate
+	uiByte = (1 << 7) | ( (eFreq & 0x07) << 4 );
+	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_CTRL_REG1, 1, &uiByte, 1, I2C_TIMEOUT);
+	
+	// FIFO mode + Watermark mode
+	uiByte = (1 << 6) | (1 << 5);
+	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_CTRL_REG2, 1, &uiByte, 1, I2C_TIMEOUT);
+	
+	// INT1 active low
+	uiByte = (1 << 7);
+	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_CTRL_REG3, 1, &uiByte, 1, I2C_TIMEOUT);
+	
+	// Watermark signal on INT1 pin
+	uiByte = (1 << 2);
+	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_CTRL_REG4, 1, &uiByte, 1, I2C_TIMEOUT);
+	
+	// Stream mode (FIFO) + Watermark level
+	uiByte = (1 << 6) | ((uiWatermark-1) & 0x1f);
+	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_FIFO_CTRL, 1, &uiByte, 1, I2C_TIMEOUT);
 }
 
 
@@ -138,8 +135,8 @@ uint8_t pl_sensor_get_data(uint8_t *tuiBuffer)
 	uint8_t uiByte = 0;
 	int i = 0;
 	
-	// Get data
-	for (i = 0 ; i < guiNbSamp ; i++)
+	// Get pressure l-m-h data
+	for (i = 0 ; i < guiWatermark ; i++)
 	{
 		HAL_I2C_Mem_Read(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_PRESS_OUT_XL, 1, tuiBuffer+3*i, 3, I2C_TIMEOUT);
 	}
@@ -151,7 +148,7 @@ uint8_t pl_sensor_get_data(uint8_t *tuiBuffer)
 	// Acknlowledge sensor IRQ by reading INT_SOURCE register [NOTA : now REG_INT_SOURCE is read !]
 	HAL_I2C_Mem_Read(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_INT_SOURCE, 1, &uiByte, 1, I2C_TIMEOUT);
 	
-	return 0;
+	return guiWatermark;
 }
 
 
@@ -165,8 +162,10 @@ void pl_sensor_stop(void)
 {
 	uint8_t uiByte = 0;
 	
-	HAL_I2C_Mem_Read(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_CTRL_REG1, 1, &uiByte, 1, I2C_TIMEOUT);
-	uiByte &= ~(1 << 7);
+	// Bypass mode (FIFO)
+	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_FIFO_CTRL, 1, &uiByte, 1, I2C_TIMEOUT);
+	
+	// Power down
 	HAL_I2C_Mem_Write(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_CTRL_REG1, 1, &uiByte, 1, I2C_TIMEOUT);	
 }
 
@@ -176,7 +175,7 @@ void EXTI4_IRQHandler(void)
 {
 	// Set gbDataAvail flag
 	gbDataAvail = 1;
-	
+
 	// Acknowledge GPIO IRQ
 	HAL_GPIO_EXTI_IRQHandler(SENSOR_INT1_PIN);
 }
