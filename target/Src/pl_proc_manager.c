@@ -20,6 +20,7 @@ void pl_proc_manager_init(pl_app_infos_t *prAppInfos)
 void pl_proc_manager_run(pl_app_infos_t *prAppInfos)
 {
 	uint8_t tuiData[SENSOR_BUF_SIZE_MAX] = {0};
+	uint8_t uiCmd = 0;
 	uint8_t i = 0;
 	
 	switch (geProcManagerState)
@@ -39,7 +40,7 @@ void pl_proc_manager_run(pl_app_infos_t *prAppInfos)
 				// Data ready
 				geProcManagerState = PL_PROC_MANAGER_GET_DATA;
 			}
-			else if ( prAppInfos->bUpdateFreq )
+			else if ( pl_notifier_data_avail(&prAppInfos->rNotifier) )
 			{
 				// Freq update requested
 				geProcManagerState = PL_PROC_MANAGER_SET_FREQ;
@@ -65,14 +66,15 @@ void pl_proc_manager_run(pl_app_infos_t *prAppInfos)
 			break;
 			
 		case PL_PROC_MANAGER_SET_FREQ :
+			// Take the new freq from producer (host)
+			pl_notifier_take(&prAppInfos->rNotifier, &uiCmd);
+			
 			// Re-start sensor with new freq
 			pl_sensor_stop();
-			pl_sensor_start(prAppInfos->eFreq, PROC_MANAGER_WATERMARK);
-			
-			// Clear flag
-			prAppInfos->bUpdateFreq = 0;
+			pl_sensor_start(uiCmd, PROC_MANAGER_WATERMARK);
 			
 			geProcManagerState = PL_PROC_MANAGER_CHECK_SENSOR;
+			
 			break;
 			
 		default :

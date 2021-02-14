@@ -45,15 +45,13 @@ void pl_host_manager_run(pl_app_infos_t *prAppInfos)
 		case PL_HOST_MANAGER_UPDATE_FREQ :
 			// Get cmd
 			pl_usart_recv(&uiCmd);
+			uiCmd -= '0'; //< '0' offset for readable numeric char
 			
-			// Check cmd (offset '0' for readable numeric char)
-			if ( uiCmd-'0' >= PL_SENSOR_FREQ_MIN && uiCmd-'0' <= PL_SENSOR_FREQ_MAX )
+			// Check cmd
+			if ( uiCmd >= PL_SENSOR_FREQ_MIN && uiCmd <= PL_SENSOR_FREQ_MAX )
 			{
-				// Update freq info
-				prAppInfos->eFreq = uiCmd;
-				
-				// Set flag
-				prAppInfos->bUpdateFreq = 1;
+				// Give the new freq to consumer (proc)
+				pl_notifier_give(&prAppInfos->rNotifier, uiCmd);
 				
 				// Send 'ACK' char to host
 				pl_usart_send(HOST_MANAGER_ACK);

@@ -3,14 +3,13 @@
 
 
 
-#include "pl_sensor.h"
+#include "pl_notifier.h"
 
 
 // -------------------- Typedefs --------------------
 typedef struct pl_app_infos
 {
-	uint8_t bUpdateFreq;
-	pl_sensor_freq_t eFreq;
+	pl_notifier_t rNotifier;
 } pl_app_infos_t;
 
 

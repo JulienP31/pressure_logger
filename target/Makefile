@@ -42,6 +42,7 @@ Src/pl_led.c \
 Src/pl_time.c \
 Src/pl_usart.c \
 Src/pl_sensor.c \
+Src/pl_notifier.c \
 Src/pl_host_manager.c \
 Src/pl_proc_manager.c \
 Drivers/CMSIS/Device/ST/STM32F1xx/Source/Templates/system_stm32f1xx.c \

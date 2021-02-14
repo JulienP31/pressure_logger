@@ -69,14 +69,13 @@ int main(void)
 	
 	pl_app_infos_t rAppInfos = {0};
 	
-	// Initialize hardware
+	// Initialize HW resources
 	pl_led_init();
 	pl_usart_init();
 	pl_sensor_init();
 	
-	// Initialize app infos
-	rAppInfos.bUpdateFreq = 0;
-	rAppInfos.eFreq = PL_SENSOR_FREQ_MIN;
+	// Initialize SW resources
+	pl_notifier_init(&rAppInfos.rNotifier);
 		
 	// Initialize state machines
 	pl_host_manager_init(&rAppInfos);
