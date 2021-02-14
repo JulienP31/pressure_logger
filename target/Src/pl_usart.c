@@ -61,7 +61,7 @@ void pl_usart_init(void)
 	
 	rGPIO_Rx_Init.Pin = USART3_RX_PIN;
 	rGPIO_Rx_Init.Mode = GPIO_MODE_AF_INPUT;
-	rGPIO_Rx_Init.Pull = GPIO_NOPULL;
+	rGPIO_Rx_Init.Pull = GPIO_PULLUP;
 	rGPIO_Rx_Init.Speed = GPIO_SPEED_FREQ_HIGH;
 	HAL_GPIO_Init(USART3_PORT, &rGPIO_Rx_Init);
 	
