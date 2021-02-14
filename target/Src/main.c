@@ -67,20 +67,26 @@ int main(void)
 	/* debug_usart(); */
 	/* debug_sensor(); */
 	
+	pl_app_infos_t rAppInfos = {0};
+	
 	// Initialize hardware
 	pl_led_init();
 	pl_usart_init();
 	pl_sensor_init();
+	
+	// Initialize app infos
+	rAppInfos.bUpdateFreq = 0;
+	rAppInfos.eFreq = PL_SENSOR_FREQ_MIN;
 		
 	// Initialize state machines
-	pl_host_manager_init();
-	pl_proc_manager_init();
+	pl_host_manager_init(&rAppInfos);
+	pl_proc_manager_init(&rAppInfos);
 	
 	while (1)
 	{
 		// Run state machines
-		pl_host_manager_run();
-		pl_proc_manager_run();
+		pl_host_manager_run(&rAppInfos);
+		pl_proc_manager_run(&rAppInfos);
 	}
 }
 

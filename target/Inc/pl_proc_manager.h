@@ -4,6 +4,7 @@
 
 
 #include "stm32f1xx_hal.h"
+#include "pl_app_infos.h"
 #include "pl_led.h"
 #include "pl_usart.h"
 #include "pl_sensor.h"
@@ -13,16 +14,15 @@
 typedef enum pl_proc_manager_state
 {
 	PL_PROC_MANAGER_INIT,
-	PL_PROC_MANAGER_WAIT_DATA,
+	PL_PROC_MANAGER_CHECK_SENSOR,
 	PL_PROC_MANAGER_GET_DATA,
-	PL_PROC_MANAGER_CHECK_FREQ,
-	PL_PROC_MANAGER_APPLY_FREQ
+	PL_PROC_MANAGER_SET_FREQ
 } pl_proc_manager_state_t;
 
 
 // -------------------- HAL Functions --------------------
-void pl_proc_manager_init(void);
-void pl_proc_manager_run(void);
+void pl_proc_manager_init(pl_app_infos_t *prAppInfos);
+void pl_proc_manager_run(pl_app_infos_t *prAppInfos);
 
 
 

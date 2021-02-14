@@ -4,6 +4,7 @@
 
 
 #include "stm32f1xx_hal.h"
+#include "pl_app_infos.h"
 #include "pl_usart.h"
 #include "pl_sensor.h"
 
@@ -18,10 +19,8 @@ typedef enum pl_host_manager_state
 
 
 // -------------------- HAL Functions --------------------
-void pl_host_manager_init(void);
-void pl_host_manager_run(void);
-
-pl_sensor_freq_t pl_host_manager_get_freq(void);
+void pl_host_manager_init(pl_app_infos_t *prAppInfos);
+void pl_host_manager_run(pl_app_infos_t *prAppInfos);
 
 
 
