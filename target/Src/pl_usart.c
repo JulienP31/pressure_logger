@@ -30,7 +30,7 @@ void pl_usart_init(void)
 	// Configure USART3
 	grUART_Handle.Instance = USART3;
 	
-	grUART_Handle.Init.BaudRate = 115200;
+	grUART_Handle.Init.BaudRate = 230400; //< [WARNING : 2 * 115200 -> picocom configured with baudrate 115200 !]
 	grUART_Handle.Init.WordLength = UART_WORDLENGTH_8B;
 	grUART_Handle.Init.StopBits = UART_STOPBITS_1;
 	grUART_Handle.Init.Parity = UART_PARITY_NONE;

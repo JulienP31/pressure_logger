@@ -16,4 +16,5 @@ run
 ----------
 
 picocom -b 115200 /dev/ttyUSB0
+[WARNING : apparently, 230400 in UART_MODE_TX_RX -> 115200 each ! big up to the scope who saved my life...]
 
