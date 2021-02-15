@@ -54,7 +54,7 @@ void pl_proc_manager_run(pl_app_infos_t *prAppInfos)
 			pl_sensor_get_data(tuiData);
 			
 			// Send data to host
-			for (i = 0 ; i < PROC_MANAGER_WATERMARK ; i++)
+			for (i = 0 ; i < 3*PROC_MANAGER_WATERMARK ; i++)
 			{
 				pl_usart_send(tuiData[i]);
 			}
