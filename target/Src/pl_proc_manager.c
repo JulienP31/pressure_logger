@@ -70,9 +70,12 @@ void pl_proc_manager_run(pl_app_infos_t *prAppInfos)
 			// Take the new freq from producer (host)
 			pl_notifier_take(&prAppInfos->rNotifier, &uiCmd);
 			
-			// [Re-]start sensor with new freq
+			// [Re-]start sensor with new freq, stop it otherwise (one-shot mode)
 			pl_sensor_stop();
-			pl_sensor_start(uiCmd, PROC_MANAGER_WATERMARK);
+			if (uiCmd > PL_SENSOR_FREQ_ONE_SHOT)
+			{
+				pl_sensor_start(uiCmd, PROC_MANAGER_WATERMARK);
+			}
 			
 			geProcManagerState = PL_PROC_MANAGER_CHECK_SENSOR;
 			
