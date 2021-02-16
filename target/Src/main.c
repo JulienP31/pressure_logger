@@ -43,23 +43,25 @@ int main(void)
 // -------------------- system_clock_config Function --------------------
 void system_clock_config(void)
 {
-	RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-	RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+	RCC_OscInitTypeDef rRCC_OscInit = {0};
+	RCC_ClkInitTypeDef rRCC_ClkInit = {0};
 
 	// Initialize RCC oscillators
-	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-	RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-	RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
-	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
-	HAL_RCC_OscConfig(&RCC_OscInitStruct);
+	rRCC_OscInit.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+	rRCC_OscInit.HSIState = RCC_HSI_ON;
+	rRCC_OscInit.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+	rRCC_OscInit.PLL.PLLState = RCC_PLL_NONE;
+	
+	HAL_RCC_OscConfig(&rRCC_OscInit);
 
 	// Initialize CPU, AHB and APB bus clocks
-	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
-	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
-	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-	HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0);
+	rRCC_ClkInit.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+	rRCC_ClkInit.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+	rRCC_ClkInit.AHBCLKDivider = RCC_SYSCLK_DIV1;
+	rRCC_ClkInit.APB1CLKDivider = RCC_HCLK_DIV1;
+	rRCC_ClkInit.APB2CLKDivider = RCC_HCLK_DIV1;
+	
+	HAL_RCC_ClockConfig(&rRCC_ClkInit, FLASH_LATENCY_0);
 }
 
 
