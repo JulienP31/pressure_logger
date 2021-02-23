@@ -2,6 +2,10 @@
 
 
 
+#define SAMP_SIZE 3
+
+
+
 pl_process::pl_process(const char *pcFilePath) :
 	_rUart(pcFilePath)
 {
@@ -30,14 +34,14 @@ void pl_process::initialize(pl_sensor_freq_t eSensorFreq, unsigned int uiNbSamp)
 
 unsigned int pl_process::get_samp()
 {
-	unsigned char ucByte = 0;
+	unsigned char tucByte[SAMP_SIZE] = {0};
 	int iRet = 0;
 	int i = 0;
 
 	// Get 3 bytes (XL/L/H) for each sample
-	for (i = 0 ; i < 3 ; i++)
+	for (i = 0 ; i < SAMP_SIZE ; i++)
 	{
-		iRet = _rUart.recv(&ucByte, 1);
+		iRet = _rUart.recv(tucByte+i, 1);
 		if (iRet)
 		{
 			;
