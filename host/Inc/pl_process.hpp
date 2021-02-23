@@ -25,7 +25,7 @@ typedef enum pl_sensor_freq
 class pl_process
 {
 public:
-	pl_process(const char *pcFilePath);
+	pl_process(const char *pcDevPath);
 	void initialize(pl_sensor_freq_t eSensorFreq, unsigned int uiNbSamp);
 	unsigned int get_samp();
 	void shutdown();

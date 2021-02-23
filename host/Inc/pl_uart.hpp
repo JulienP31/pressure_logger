@@ -13,7 +13,7 @@
 class pl_uart
 {
 public:
-	pl_uart(const char *pcFilePath);
+	pl_uart(const char *pcDevPath);
 	int initialize();
 	int send(unsigned char ucByte) const;
 	int recv(unsigned char *pucBuffer, size_t uiLength) const;
@@ -22,8 +22,8 @@ public:
 private:
 	pl_uart(const pl_uart&) = delete; //< Delete copy-constructor
 	pl_uart& operator=(const pl_uart&) = delete; //< Delete assigment operator
-	
-	char *_pcFilePath;
+
+	char *_pcDevPath;
 	int _iFileDesc;
 	struct termios _rTerm;
 };
