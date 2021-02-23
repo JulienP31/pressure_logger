@@ -13,6 +13,8 @@ set(INC_DIR Inc)
 
 set(SRCS
 	${SRC_DIR}/main.cpp
+	${SRC_DIR}/pl_process.cpp
+	${SRC_DIR}/pl_error.cpp
 	${SRC_DIR}/pl_uart.cpp
 	${SRC_DIR}/pl_report.cpp
 	${SRC_DIR}/pl_report_bin.cpp

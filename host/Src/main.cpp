@@ -2,7 +2,7 @@
 
 
 
-#define PL_NB_REPORTS 2
+#define PL_NB_SAMP 100
 
 
 
@@ -12,27 +12,14 @@ int main(void)
 	
 	try
 	{
-		unsigned char ucByte = 0;
-		int i = 0;
-		pl_uart rUart;
-		pl_report *tprReports[PL_NB_REPORTS] = {NULL};
-		pl_report_bin rReport_bin;
-		pl_report_txt rReport_txt;
+		pl_process proc("/dev/ttyUSB0");
 		
-		rUart.recv(&ucByte);
-		cout << ucByte << '\n';
-		
-		tprReports[0] = &rReport_bin;
-		tprReports[1] = &rReport_txt;
-		for (i = 0 ; i < PL_NB_REPORTS ; i++)
-		{
-			tprReports[i]->write(&ucByte, 1);
-			cout << ucByte << '\n';
-		}
+		proc.initialize(PL_SENSOR_FREQ_25_HZ, PL_NB_SAMP);
+		while ( proc.get_samp() );
 	}
-	catch (exception &e)
+	catch (std::exception &e)
 	{
-		cout << "Exception: " << e.what();
+		std::cerr << "Exception: " << e.what() << std::endl;
 		iRet = -1;
 	}
 
