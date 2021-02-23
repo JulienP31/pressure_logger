@@ -2,14 +2,14 @@
 
 
 
-pl_uart::pl_uart(const char *pcFilePath) :
+pl_uart::pl_uart(const char *pcDevPath) :
 	_iFileDesc(0)
 {
 	size_t uiLength = 0;
 
-	uiLength = strlen(pcFilePath);
-	_pcFilePath = new char[uiLength+1];
-	strncpy(_pcFilePath, pcFilePath, uiLength);
+	uiLength = strlen(pcDevPath);
+	_pcDevPath = new char[uiLength+1];
+	strncpy(_pcDevPath, pcDevPath, uiLength);
 
 	memset(&_rTerm, 0, sizeof(_rTerm));
 }
@@ -20,7 +20,7 @@ int pl_uart::initialize()
 	int iRet = 0;
 
 	// Open serial port
-	_iFileDesc = open(_pcFilePath, O_RDWR);
+	_iFileDesc = open(_pcDevPath, O_RDWR);
 	if (_iFileDesc < 0)
 		return _iFileDesc;
 
@@ -87,7 +87,7 @@ void pl_uart::shutdown()
 pl_uart::~pl_uart()
 {
 	shutdown();
-	if (_pcFilePath)
-		delete[] _pcFilePath;
+	if (_pcDevPath)
+		delete[] _pcDevPath;
 }
 
