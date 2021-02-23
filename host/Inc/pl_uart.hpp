@@ -3,15 +3,29 @@
 
 
 
+#include <cstring>
+#include <fcntl.h>
+#include <unistd.h>
+#include <termios.h>
+
+
+
 class pl_uart
 {
 public:
-	pl_uart();
+	pl_uart(const char *pcFilePath);
 	int initialize();
 	int send(unsigned char ucByte) const;
-	int recv(unsigned char *pucByte) const;
+	int recv(unsigned char *pucBuffer, size_t uiLength) const;
 	void shutdown();
 	~pl_uart();
+private:
+	pl_uart(const pl_uart&) = delete; //< Delete copy-constructor
+	pl_uart& operator=(const pl_uart&) = delete; //< Delete assigment operator
+	
+	char *_pcFilePath;
+	int _iFileDesc;
+	struct termios _rTerm;
 };
 
 
