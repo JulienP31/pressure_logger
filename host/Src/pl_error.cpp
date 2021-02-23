@@ -16,7 +16,14 @@ pl_error::pl_error(const char *pcErrDesc, int iErrCode)
 }
 
 
-const char *pl_error::what() const throw()
+pl_error::pl_error(const pl_error& rError) noexcept
+{
+	_pcErrDesc = new char[ERR_DESC_MAX_LEN];
+	strncpy(_pcErrDesc, rError._pcErrDesc, ERR_DESC_MAX_LEN);
+}
+
+
+const char *pl_error::what() const noexcept
 {
 	return _pcErrDesc;
 }
