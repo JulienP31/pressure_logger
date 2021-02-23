@@ -17,3 +17,8 @@ run
 
 picocom -b 115200 /dev/ttyUSB0
 
+
+2) Host
+
+./PressureLogger
+
