@@ -71,9 +71,9 @@ int pl_uart::send(unsigned char ucByte) const
 }
 
 
-int pl_uart::recv(unsigned char *pucBuffer, size_t uiLength) const
+int pl_uart::recv(unsigned char *pucByte) const
 {
-	return read(_iFileDesc, pucBuffer, uiLength);
+	return read(_iFileDesc, pucByte, 1);
 }
 
 
