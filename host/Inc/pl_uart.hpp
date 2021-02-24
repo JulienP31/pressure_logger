@@ -16,7 +16,7 @@ public:
 	pl_uart(const char *pcDevPath);
 	int initialize();
 	int send(unsigned char ucByte) const;
-	int recv(unsigned char *pucBuffer, size_t uiLength) const;
+	int recv(unsigned char *pucByte) const;
 	void shutdown();
 	~pl_uart();
 private:
