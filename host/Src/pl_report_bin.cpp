@@ -4,17 +4,17 @@
 
 int pl_report_bin::open()
 {
-	
-	
-	return 0;
+	_rFile.open("pressure.bin", std::ios::binary | std::ios::trunc);
+
+	return _rFile.is_open() ? 0 : -1;
 }
 
 
-int pl_report_bin::write(unsigned char *pucByte, unsigned int uiLength) const
+int pl_report_bin::write(const unsigned char *pucByte, unsigned int uiLength)
 {
-	*pucByte = 'B';
-	
-	return 0;
+	_rFile.write((const char *)pucByte, uiLength);
+
+	return _rFile.good() ? 0 : -2;
 }
 
 
