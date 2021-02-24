@@ -31,7 +31,11 @@ public:
 	void shutdown();
 	~pl_process();
 private:
+	pl_process(const pl_process&) = delete; //< Delete copy-constructor
+	pl_process& operator=(const pl_process&) = delete; //< Delete assigment operator
+	
 	pl_uart _rUart;
+	pl_report **_tprReport;
 	unsigned int _uiNbSamp;
 };
 

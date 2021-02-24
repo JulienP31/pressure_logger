@@ -11,7 +11,7 @@ class pl_report_bin : public pl_report
 {
 public:
 	int open();
-	int write(unsigned char *pucByte, unsigned int uiLength) const;
+	int write(const unsigned char *pucByte, unsigned int uiLength);
 	~pl_report_bin();
 };
 

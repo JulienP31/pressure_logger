@@ -3,14 +3,21 @@
 
 
 
+#include <iostream>
+#include <fstream>
+
+
+
 class pl_report
 {
 public:
 	pl_report();
 	virtual int open() = 0;
-	virtual int write(unsigned char *pucByte, unsigned int uiLength) const = 0;
+	virtual int write(const unsigned char *pucByte, unsigned int uiLength) = 0;
 	void close();
 	~pl_report();
+protected:
+	std::ofstream _rFile;
 };
 
 
