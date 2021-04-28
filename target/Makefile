@@ -23,6 +23,7 @@ TARGET = target
 DEBUG = 1
 # optimization
 #OPT = -Og
+RTOS ?= 0
 
 
 #######################################
@@ -36,15 +37,11 @@ BUILD_DIR = build
 ######################################
 # C sources
 C_SOURCES =  \
-Src/main.c \
-Src/stm32f1xx_it.c \
-Src/pl_led.c \
-Src/pl_time.c \
-Src/pl_usart.c \
-Src/pl_sensor.c \
-Src/pl_notifier.c \
-Src/pl_host_manager.c \
-Src/pl_proc_manager.c \
+Src/pl_common/stm32f1xx_it.c \
+Src/pl_common/pl_led.c \
+Src/pl_common/pl_time.c \
+Src/pl_common/pl_usart.c \
+Src/pl_common/pl_sensor.c \
 Drivers/CMSIS/Device/ST/STM32F1xx/Source/Templates/system_stm32f1xx.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.c \
@@ -55,6 +52,25 @@ Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c \
 Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c \
+
+ifeq ($(RTOS), 1)
+C_SOURCES +=  \
+Src/pl_sys_RTOS/main.c \
+Src/pl_sys_RTOS/pl_notifier.c \
+Src/pl_sys_RTOS/pl_host_manager.c \
+Src/pl_sys_RTOS/pl_proc_manager.c \
+FreeRTOS/Source/tasks.c \
+FreeRTOS/Source/queue.c \
+FreeRTOS/Source/list.c \
+FreeRTOS/Source/portable/GCC/ARM_CM3/port.c \
+FreeRTOS/Source/portable/MemMang/heap_4.c
+else
+C_SOURCES +=  \
+Src/pl_sys_FSM/main.c \
+Src/pl_sys_FSM/pl_notifier.c \
+Src/pl_sys_FSM/pl_host_manager.c \
+Src/pl_sys_FSM/pl_proc_manager.c
+endif
 
 # ASM sources
 ASM_SOURCES =  \
@@ -111,10 +127,21 @@ AS_INCLUDES =
 # C includes
 C_INCLUDES =  \
 -IInc \
+-IInc/pl_common \
 -IDrivers/STM32F1xx_HAL_Driver/Inc \
 -IDrivers/STM32F1xx_HAL_Driver/Inc/Legacy \
 -IDrivers/CMSIS/Device/ST/STM32F1xx/Include \
 -IDrivers/CMSIS/Include \
+
+ifeq ($(RTOS), 1)
+C_INCLUDES +=  \
+-IInc/pl_sys_RTOS \
+-IFreeRTOS/Source/include \
+-IFreeRTOS/Source/portable/GCC/ARM_CM3
+else
+C_INCLUDES +=  \
+-IInc/pl_sys_FSM
+endif
 
 
 # compile gcc flags

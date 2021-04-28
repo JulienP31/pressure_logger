@@ -3,7 +3,11 @@ Pressure sensor data logger [STM32F103 Nucleo]
 
 
 
-1) Debug
+1) Build (FSM or FreeRTOS version)
+make RTOS=1
+
+
+2) Debug
 
 openocd -f ${HOME}/openocd-code/tcl/board/st_nucleo_f103rb.cfg
 
@@ -18,7 +22,7 @@ run
 picocom -b 115200 /dev/ttyUSB0
 
 
-2) Host
+3) Host
 
 ./PressureLogger
 

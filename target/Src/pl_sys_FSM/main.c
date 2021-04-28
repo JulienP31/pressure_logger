@@ -5,9 +5,9 @@
 #define DEBUG 1
 
 
-void system_clock_config(void);
-void debug_usart(void);
-void debug_sensor(void);
+static void system_clock_config(void);
+static void debug_usart(void);
+static void debug_sensor(void);
 
 
 // -------------------- main Function --------------------
@@ -41,7 +41,7 @@ int main(void)
 
 
 // -------------------- system_clock_config Function --------------------
-void system_clock_config(void)
+static void system_clock_config(void)
 {
 	RCC_OscInitTypeDef rRCC_OscInit = {0};
 	RCC_ClkInitTypeDef rRCC_ClkInit = {0};
@@ -72,7 +72,7 @@ void system_clock_config(void)
 #include "pl_time.h"
 
 
-void debug_usart(void)
+static void debug_usart(void)
 {
 	uint8_t uiMyByte = 'a';
 	
@@ -95,7 +95,7 @@ void debug_usart(void)
 }
 
 
-void debug_sensor(void)
+static void debug_sensor(void)
 {
 	uint8_t tuiBuffer[SENSOR_BUF_SIZE_MAX] = {0};
 	uint8_t uiNbSamp = 0;
