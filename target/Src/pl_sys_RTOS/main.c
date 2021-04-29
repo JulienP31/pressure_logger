@@ -5,11 +5,13 @@
 static void system_clock_config(void);
 
 
+// -------------------- Global variables --------------------
+static pl_app_infos_t grAppInfos;
+
+
 // -------------------- main Function --------------------
 int main(void)
-{
-	pl_app_infos_t rAppInfos = {0};
-	
+{	
 	// Initialize HW resources
 	system_clock_config();
 	pl_led_init();
@@ -17,16 +19,16 @@ int main(void)
 	pl_sensor_init();
 	
 	// Initialize SW resources
-	rAppInfos.hQueue_HostProc = xQueueCreate(PL_HP_QUEUE_LEN, PL_HP_QUEUE_ITEM_SIZE);
+	grAppInfos.hQueue_HostProc = xQueueCreate(PL_HP_QUEUE_LEN, PL_HP_QUEUE_ITEM_SIZE);
 	
 	// Create tasks
-        xTaskCreate(pl_host_task, "host", configMINIMAL_STACK_SIZE, &rAppInfos, PL_HOST_TASK_PRIORITY, NULL);
-        xTaskCreate(pl_proc_task, "proc", configMINIMAL_STACK_SIZE, &rAppInfos, PL_PROC_TASK_PRIORITY, NULL);
+        xTaskCreate(pl_host_task, "host", configMINIMAL_STACK_SIZE, &grAppInfos, PL_HOST_TASK_PRIORITY, NULL);
+        xTaskCreate(pl_proc_task, "proc", configMINIMAL_STACK_SIZE, &grAppInfos, PL_PROC_TASK_PRIORITY, NULL);
 		
 	// Run tasks
 	vTaskStartScheduler();
 	
-	while (1) { }
+	return 0;
 }
 
 
