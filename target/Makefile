@@ -56,7 +56,6 @@ Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_i2c.c \
 ifeq ($(RTOS), 1)
 C_SOURCES +=  \
 Src/pl_sys_RTOS/main.c \
-Src/pl_sys_RTOS/pl_notifier.c \
 Src/pl_sys_RTOS/pl_host_manager.c \
 Src/pl_sys_RTOS/pl_proc_manager.c \
 FreeRTOS/Source/tasks.c \

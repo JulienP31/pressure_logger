@@ -3,20 +3,25 @@
 
 
 static void system_clock_config(void);
-static void dummyTask(void *pvParameters);
 
 
 // -------------------- main Function --------------------
 int main(void)
 {
+	pl_app_infos_t rAppInfos = {0};
+	
 	// Initialize HW resources
 	system_clock_config();
 	pl_led_init();
 	pl_usart_init();
 	pl_sensor_init();
 	
+	// Initialize SW resources
+	rAppInfos.hQueue_HostProc = xQueueCreate(PL_HP_QUEUE_LEN, PL_HP_QUEUE_ITEM_SIZE);
+	
 	// Create tasks
-        xTaskCreate(dummyTask, "dummy", configMINIMAL_STACK_SIZE, NULL, 1, NULL); 
+        xTaskCreate(pl_host_task, "host", configMINIMAL_STACK_SIZE, &rAppInfos, PL_HOST_TASK_PRIORITY, NULL);
+        xTaskCreate(pl_proc_task, "proc", configMINIMAL_STACK_SIZE, &rAppInfos, PL_PROC_TASK_PRIORITY, NULL);
 		
 	// Run tasks
 	vTaskStartScheduler();
@@ -49,8 +54,3 @@ static void system_clock_config(void)
 	HAL_RCC_ClockConfig(&rRCC_ClkInit, FLASH_LATENCY_0);
 }
 
-
-static void dummyTask(void *pvParameters)
-{
-	while (1) { }
-}

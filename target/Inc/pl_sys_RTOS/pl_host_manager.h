@@ -19,8 +19,7 @@ typedef enum pl_host_manager_state
 
 
 // -------------------- HAL Functions --------------------
-void pl_host_manager_init(pl_app_infos_t *prAppInfos);
-void pl_host_manager_run(pl_app_infos_t *prAppInfos);
+void pl_host_task(void *pvParameters);
 
 
 

@@ -21,8 +21,7 @@ typedef enum pl_proc_manager_state
 
 
 // -------------------- HAL Functions --------------------
-void pl_proc_manager_init(pl_app_infos_t *prAppInfos);
-void pl_proc_manager_run(pl_app_infos_t *prAppInfos);
+void pl_proc_task(void *pvParameters);
 
 
 

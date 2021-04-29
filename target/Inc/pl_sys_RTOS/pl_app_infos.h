@@ -3,13 +3,20 @@
 
 
 
-#include "pl_notifier.h"
+#include <FreeRTOS.h>
+#include <queue.h>
 
 
 // -------------------- Typedefs --------------------
+typedef struct pl_msg_host_proc
+{
+	uint8_t uiCmd;
+} pl_msg_host_proc_t;
+
+
 typedef struct pl_app_infos
 {
-	pl_notifier_t rNotifier;
+	QueueHandle_t hQueue_HostProc;
 } pl_app_infos_t;
 
 
