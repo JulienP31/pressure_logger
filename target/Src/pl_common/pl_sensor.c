@@ -96,8 +96,13 @@ void pl_sensor_init(void)
 	// Initialize I2C1
 	HAL_I2C_Init(&grI2C_Handle);
 	
-	// Get sensor ID
-	HAL_I2C_Mem_Read(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_WHO_AM_I, 1, &uiSensorId, 1, I2C_TIMEOUT); //< [NOTA : for debug -> Id = 0xbd]
+#if 0
+	// Get sensor ID [NOTA : for some reason, generates a hard fault IRQ if done whith FreeRTOS !]
+	if ( HAL_I2C_IsDeviceReady(&grI2C_Handle, SENSOR_I2C_ADDRESS, 100, I2C_TIMEOUT) == HAL_OK )
+	{
+		HAL_I2C_Mem_Read(&grI2C_Handle, SENSOR_I2C_ADDRESS, REG_WHO_AM_I, 1, &uiSensorId, 1, I2C_TIMEOUT); //< [NOTA : for debug -> Id = 0xbd]
+	}
+#endif
 }
 
 
